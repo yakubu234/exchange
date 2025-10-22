@@ -31,12 +31,12 @@ const bookingSchema = z.object({
 const BookingPage = () => {
   const { service } = useParams();
   const navigate = useNavigate();
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [time, setTime] = useState<string>("");
-  const [serviceName, setServiceName] = useState<string>("");
-  const [servicePrice, setServicePrice] = useState<number>(0);
+  const [date, setDate] = useState(undefined);
+  const [time, setTime] = useState("");
+  const [serviceName, setServiceName] = useState("");
+  const [servicePrice, setServicePrice] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("bank-transfer");
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [receiptFile, setReceiptFile] = useState(null);
   const [bookingId] = useState(`BKG-${Math.random().toString(36).substr(2, 5).toUpperCase()}`);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const BookingPage = () => {
     }
   }, [service]);
 
-  const form = useForm<z.infer<typeof bookingSchema>>({
+  const form = useForm({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       firstName: "",
@@ -68,13 +68,13 @@ const BookingPage = () => {
     "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
   ];
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setReceiptFile(e.target.files[0]);
     }
   };
 
-  const handleBooking = (data: z.infer<typeof bookingSchema>) => {
+  const handleBooking = (data) => {
     if (!date || !time) {
       toast.error("Please select both date and time");
       return;

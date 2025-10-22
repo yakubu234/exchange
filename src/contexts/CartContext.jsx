@@ -1,33 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
-  category?: string;
-}
+const CartContext = createContext(undefined);
 
-interface CartContextType {
-  cartItems: CartItem[];
-  savedItems: CartItem[];
-  addToCart: (item: Omit<CartItem, "quantity">) => void;
-  removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
-  saveForLater: (id: string) => void;
-  moveToCart: (id: string) => void;
-  clearCart: () => void;
-  getTotalItems: () => number;
-  getTotalPrice: () => number;
-}
-
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [savedItems, setSavedItems] = useState<CartItem[]>([]);
+export const CartProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState([]);
+  const [savedItems, setSavedItems] = useState([]);
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -51,7 +29,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("savedItems", JSON.stringify(savedItems));
   }, [savedItems]);
 
-  const addToCart = (item: Omit<CartItem, "quantity">) => {
+  const addToCart = (item) => {
     setCartItems((prev) => {
       const existingItem = prev.find((i) => i.id === item.id);
       
@@ -73,7 +51,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  const removeFromCart = (id: string) => {
+  const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
     toast({
       title: "Item Removed",
@@ -81,7 +59,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = (id, quantity) => {
     if (quantity < 1) {
       removeFromCart(id);
       return;
@@ -92,7 +70,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   };
 
-  const saveForLater = (id: string) => {
+  const saveForLater = (id) => {
     const item = cartItems.find((i) => i.id === id);
     if (item) {
       setSavedItems((prev) => [...prev, item]);
@@ -104,7 +82,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const moveToCart = (id: string) => {
+  const moveToCart = (id) => {
     const item = savedItems.find((i) => i.id === id);
     if (item) {
       setCartItems((prev) => [...prev, item]);

@@ -12,24 +12,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/hooks/use-toast";
 import { ShoppingBag, CreditCard, Building2, Mail, Phone, Upload } from "lucide-react";
 
-export interface Order {
-  id: string;
-  items: any[];
-  total: number;
-  customerInfo: {
-    fullName: string;
-    email: string;
-    phone: string;
-    address: string;
-    city: string;
-    postcode: string;
-  };
-  paymentMethod: string;
-  paymentStatus: "pending" | "paid" | "approved";
-  receiptUrl?: string;
-  createdAt: string;
-}
-
 const generateOrderId = () => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
@@ -43,7 +25,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const [paymentMethod, setPaymentMethod] = useState("bank-transfer");
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [receiptFile, setReceiptFile] = useState(null);
   const [orderId] = useState(generateOrderId());
   const [formData, setFormData] = useState({
     fullName: "",
@@ -57,20 +39,20 @@ const Checkout = () => {
     cvv: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setReceiptFile(e.target.files[0]);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     // Basic validation
@@ -84,7 +66,7 @@ const Checkout = () => {
     }
 
     // Create order
-    const order: Order = {
+    const order = {
       id: orderId,
       items: cartItems,
       total: getTotalPrice() + 5,

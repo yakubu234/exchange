@@ -655,7 +655,7 @@ const AdminDashboard = () => {
     const stored = localStorage.getItem("adminProducts");
     const productsData = stored && JSON.parse(stored).length > 0 ? JSON.parse(stored) : INITIAL_PRODUCTS;
     // Add inventory tracking if not present
-    return productsData.map((p: any) => ({
+    return productsData.map((p) => ({
       ...p,
       stock: p.stock ?? 0,
       inventoryHistory: p.inventoryHistory ?? []
@@ -667,9 +667,9 @@ const AdminDashboard = () => {
     name: "",
     price: "",
     category: "",
-    image: null as File | null,
+    image: null,
   });
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState("");
   const [newGallery, setNewGallery] = useState({ title: "", image: "" });
   
   
@@ -683,11 +683,11 @@ const AdminDashboard = () => {
   const itemsPerPage = 4;
   
   // Order details dialog state
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [orderDialogOpen, setOrderDialogOpen] = useState(false);
   
   // Inventory management dialog state
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [inventoryDialogOpen, setInventoryDialogOpen] = useState(false);
   const [inventoryUnits, setInventoryUnits] = useState("");
   const [inventoryHistoryPage, setInventoryHistoryPage] = useState(1);
@@ -729,19 +729,19 @@ const AdminDashboard = () => {
     toast.success("Product added successfully!");
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setNewProduct({ ...newProduct, image: file });
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleManageInventory = (product: any) => {
+  const handleManageInventory = (product) => {
     setSelectedProduct(product);
     setInventoryDialogOpen(true);
     setInventoryUnits("");
@@ -755,7 +755,7 @@ const AdminDashboard = () => {
     }
 
     const unitsToAdd = parseInt(inventoryUnits);
-    const updated = products.map((p: any) => {
+    const updated = products.map((p) => {
       if (p.id === selectedProduct.id) {
         const newStock = (p.stock || 0) + unitsToAdd;
         const historyEntry = {
@@ -776,7 +776,7 @@ const AdminDashboard = () => {
 
     setProducts(updated);
     localStorage.setItem("adminProducts", JSON.stringify(updated));
-    setSelectedProduct(updated.find((p: any) => p.id === selectedProduct.id));
+    setSelectedProduct(updated.find((p) => p.id === selectedProduct.id));
     setInventoryUnits("");
     toast.success(`Added ${unitsToAdd} units to inventory!`);
   };
@@ -794,15 +794,15 @@ const AdminDashboard = () => {
     toast.success("Gallery item added!");
   };
 
-  const deleteGalleryItem = (id: string) => {
-    const updated = gallery.filter((g: any) => g.id !== id);
+  const deleteGalleryItem = (id) => {
+    const updated = gallery.filter((g) => g.id !== id);
     setGallery(updated);
     localStorage.setItem("adminGallery", JSON.stringify(updated));
     toast.success("Gallery item deleted!");
   };
 
-  const updateOrderStatus = (orderId: string, status: string) => {
-    const updated = orders.map((o: any) => 
+  const updateOrderStatus = (orderId, status) => {
+    const updated = orders.map((o) =>
       o.id === orderId ? { ...o, paymentStatus: status } : o
     );
     setOrders(updated);
@@ -816,7 +816,7 @@ const AdminDashboard = () => {
     toast.success(`Order status updated to ${status}!`);
   };
 
-  const handleViewOrder = (order: any) => {
+  const handleViewOrder = (order) => {
     setSelectedOrder(order);
     setOrderDialogOpen(true);
   };
@@ -824,7 +824,7 @@ const AdminDashboard = () => {
 
   // Filter bookings based on search
   const filteredBookings = useMemo(() => {
-    return bookings.filter((booking: any) => {
+    return bookings.filter((booking) => {
       const matchesQuery = bookingSearch.query === "" || 
         booking.id.toLowerCase().includes(bookingSearch.query.toLowerCase()) ||
         booking.fullName.toLowerCase().includes(bookingSearch.query.toLowerCase()) ||
@@ -842,7 +842,7 @@ const AdminDashboard = () => {
 
   // Filter orders based on search
   const filteredOrders = useMemo(() => {
-    return orders.filter((order: any) => {
+    return orders.filter((order) => {
       const matchesQuery = orderSearch.query === "" || 
         order.id.toLowerCase().includes(orderSearch.query.toLowerCase()) ||
         order.fullName?.toLowerCase().includes(orderSearch.query.toLowerCase()) ||
@@ -997,7 +997,7 @@ const AdminDashboard = () => {
             {/* Orders List */}
             <div className="grid gap-4 md:grid-cols-2">
               {paginatedOrders.length > 0 ? (
-                paginatedOrders.map((order: any) => (
+                paginatedOrders.map((order) => (
                   <Card key={order.id} className="overflow-hidden">
                     <CardHeader className="bg-muted/50 pb-3">
                       <div className="flex items-start justify-between">
@@ -1048,7 +1048,7 @@ const AdminDashboard = () => {
                           <span>Items ({order.items?.length || 1})</span>
                         </div>
                         <div className="pl-6 space-y-1">
-                          {order.items?.slice(0, 2).map((item: any, idx: number) => (
+                          {order.items?.slice(0, 2).map((item, idx) => (
                             <p key={idx} className="text-xs text-muted-foreground">
                               {item.name} × {item.quantity}
                             </p>
@@ -1243,7 +1243,7 @@ const AdminDashboard = () => {
                       Order Items
                     </h3>
                     <div className="space-y-2">
-                      {selectedOrder.items?.map((item: any, idx: number) => (
+                      {selectedOrder.items?.map((item, idx) => (
                         <div key={idx} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
                           <div>
                             <p className="font-medium">{item.name}</p>
@@ -1331,7 +1331,7 @@ const AdminDashboard = () => {
                         onClick={() => {
                           const customerEmail = selectedOrder.customerInfo?.email || selectedOrder.email;
                           const subject = `Your Receipt - Order ${selectedOrder.id}`;
-                          const body = `Dear ${selectedOrder.customerInfo?.fullName || selectedOrder.fullName},\n\nThank you for your order ${selectedOrder.id}.\n\nOrder Details:\nTotal: £${selectedOrder.total.toFixed(2)}\nStatus: ${selectedOrder.paymentStatus}\nDate: ${new Date(selectedOrder.createdAt).toLocaleDateString("en-GB")}\n\nItems:\n${selectedOrder.items?.map((item: any) => `- ${item.name} x${item.quantity} - £${(item.price * item.quantity).toFixed(2)}`).join("\n")}\n\nIf you have any questions, please contact us.\n\nBest regards,\nGlow Beauty Emporium`;
+                          const body = `Dear ${selectedOrder.customerInfo?.fullName || selectedOrder.fullName},\n\nThank you for your order ${selectedOrder.id}.\n\nOrder Details:\nTotal: £${selectedOrder.total.toFixed(2)}\nStatus: ${selectedOrder.paymentStatus}\nDate: ${new Date(selectedOrder.createdAt).toLocaleDateString("en-GB")}\n\nItems:\n${selectedOrder.items?.map((item) => `- ${item.name} x${item.quantity} - £${(item.price * item.quantity).toFixed(2)}`).join("\n")}\n\nIf you have any questions, please contact us.\n\nBest regards,\nGlow Beauty Emporium`;
                           
                           window.location.href = `mailto:${customerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                           toast.info("Opening email client with receipt details...");
@@ -1399,7 +1399,7 @@ const AdminDashboard = () => {
                                       <h3>Receipt Details</h3>
                                       <p><strong>Receipt No:</strong> ${selectedOrder.id}</p>
                                       <p><strong>Date:</strong> ${new Date(selectedOrder.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}</p>
-                                      <p><strong>Payment Method:</strong> ${selectedOrder.paymentMethod?.replace("-", " ").replace(/\b\w/g, (l: string) => l.toUpperCase()) || "N/A"}</p>
+                                      <p><strong>Payment Method:</strong> ${selectedOrder.paymentMethod?.replace("-", " ").replace(/\b\w/g, (l) => l.toUpperCase()) || "N/A"}</p>
                                     </div>
                                     <div class="detail-section">
                                       <h3>Customer</h3>
@@ -1418,7 +1418,7 @@ const AdminDashboard = () => {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      ${selectedOrder.items?.map((item: any) => `
+                                      ${selectedOrder.items?.map((item) => `
                                         <tr>
                                           <td>${item.name}</td>
                                           <td>${item.quantity}</td>
@@ -1497,17 +1497,17 @@ const AdminDashboard = () => {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       £{orders
-                        .filter((o: any) => {
+                        .filter((o) => {
                           const orderDate = new Date(o.createdAt || o.date);
                           const today = new Date();
                           return orderDate.toDateString() === today.toDateString() && 
                                  (o.paymentStatus === "paid" || o.paymentStatus === "completed");
                         })
-                        .reduce((sum: number, o: any) => sum + o.total, 0)
+                        .reduce((sum, o) => sum + o.total, 0)
                         .toFixed(2)}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {orders.filter((o: any) => {
+                      {orders.filter((o) => {
                         const orderDate = new Date(o.createdAt || o.date);
                         const today = new Date();
                         return orderDate.toDateString() === today.toDateString();
@@ -1524,18 +1524,18 @@ const AdminDashboard = () => {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       £{orders
-                        .filter((o: any) => {
+                        .filter((o) => {
                           const orderDate = new Date(o.createdAt || o.date);
                           const weekAgo = new Date();
                           weekAgo.setDate(weekAgo.getDate() - 7);
                           return orderDate >= weekAgo && 
                                  (o.paymentStatus === "paid" || o.paymentStatus === "completed");
                         })
-                        .reduce((sum: number, o: any) => sum + o.total, 0)
+                        .reduce((sum, o) => sum + o.total, 0)
                         .toFixed(2)}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {orders.filter((o: any) => {
+                      {orders.filter((o) => {
                         const orderDate = new Date(o.createdAt || o.date);
                         const weekAgo = new Date();
                         weekAgo.setDate(weekAgo.getDate() - 7);
@@ -1553,17 +1553,17 @@ const AdminDashboard = () => {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       £{orders
-                        .filter((o: any) => {
+                        .filter((o) => {
                           const orderDate = new Date(o.createdAt || o.date);
                           const currentYear = new Date().getFullYear();
                           return orderDate.getFullYear() === currentYear && 
                                  (o.paymentStatus === "paid" || o.paymentStatus === "completed");
                         })
-                        .reduce((sum: number, o: any) => sum + o.total, 0)
+                        .reduce((sum, o) => sum + o.total, 0)
                         .toFixed(2)}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {orders.filter((o: any) => {
+                      {orders.filter((o) => {
                         const orderDate = new Date(o.createdAt || o.date);
                         const currentYear = new Date().getFullYear();
                         return orderDate.getFullYear() === currentYear;
@@ -1664,7 +1664,7 @@ const AdminDashboard = () => {
                           </TableCell>
                         </TableRow>
                       ) : (
-                        products.map((product: any) => (
+                        products.map((product) => (
                           <TableRow key={product.id}>
                             <TableCell>
                               {product.image ? (
@@ -1826,7 +1826,7 @@ const AdminDashboard = () => {
                             (inventoryHistoryPage - 1) * inventoryHistoryPerPage,
                             inventoryHistoryPage * inventoryHistoryPerPage
                           )
-                          .map((entry: any) => (
+                          .map((entry) => (
                             <TableRow key={entry.id}>
                               <TableCell>
                                 {new Date(entry.date).toLocaleDateString("en-GB", {

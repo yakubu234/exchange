@@ -40,7 +40,7 @@ const ShopProducts = () => {
     },
   ];
 
-  const handleComingSoonClick = (productTitle: string) => {
+  const handleComingSoonClick = (productTitle) => {
     toast({
       title: "Coming Soon!",
       description: `${productTitle} will be available soon. Stay tuned!`,

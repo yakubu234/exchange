@@ -5,23 +5,23 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles, Scissors, Star } from "lucide-react";
-import { getBookingServices, getServiceCategories, type BookingService, type ServiceCategory } from "@/components/ServicesAdmin";
+import { getBookingServices, getServiceCategories } from "@/components/ServicesAdmin";
 
 const BookServices = () => {
-  const [services, setServices] = useState<BookingService[]>([]);
-  const [categories, setCategories] = useState<ServiceCategory[]>([]);
+  const [services, setServices] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     setServices(getBookingServices());
     setCategories(getServiceCategories());
   }, []);
 
-  const getServicesByCategory = (categoryId: string) => {
+  const getServicesByCategory = (categoryId) => {
     return services.filter(s => s.category === categoryId);
   };
 
-  const getCategoryIcon = (iconName: string) => {
-    const icons: Record<string, any> = {
+  const getCategoryIcon = (iconName) => {
+    const icons = {
       Sparkles,
       Scissors,
       Star,

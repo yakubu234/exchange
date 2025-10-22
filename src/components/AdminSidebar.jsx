@@ -19,12 +19,7 @@ const menuItems = [
   { title: "Gallery", value: "gallery", icon: Image },
 ];
 
-interface AdminSidebarProps {
-  activeTab: string;
-  onTabChange: (value: string) => void;
-}
-
-export function AdminSidebar({ activeTab, onTabChange }: AdminSidebarProps) {
+export function AdminSidebar({ activeTab, onTabChange }) {
   const { state, open } = useSidebar();
   const isCollapsed = state === "collapsed";
 

@@ -31,27 +31,27 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const [orders] = useState(() => JSON.parse(localStorage.getItem("orders") || "[]"));
   const [bookings, setBookings] = useState(() => JSON.parse(localStorage.getItem("bookings") || "[]"));
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
-  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedBooking, setSelectedBooking] = useState(null);
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [receiptFile, setReceiptFile] = useState(null);
   const [bookingsPage, setBookingsPage] = useState(1);
   const [ordersPage, setOrdersPage] = useState(1);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setReceiptFile(e.target.files[0]);
     }
   };
 
-  const handleUploadReceipt = (bookingId: string) => {
+  const handleUploadReceipt = (bookingId) => {
     if (!receiptFile) {
       toast.error("Please select a file to upload");
       return;
     }
 
-    const updatedBookings = bookings.map((b: any) => 
+    const updatedBookings = bookings.map((b) =>
       b.id === bookingId 
         ? { ...b, receiptUrl: URL.createObjectURL(receiptFile), paymentStatus: "pending" }
         : b
@@ -103,7 +103,7 @@ const UserDashboard = () => {
               </Card>
             ) : (
               <>
-                {paginatedOrders.map((order: any) => (
+                {paginatedOrders.map((order) => (
                   <Card key={order.id}>
                     <CardHeader>
                       <CardTitle className="flex items-center justify-between">
@@ -118,7 +118,7 @@ const UserDashboard = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {order.items.map((item: any, idx: number) => (
+                        {order.items.map((item, idx) => (
                           <div key={idx} className="flex justify-between">
                             <span>{item.name} x {item.quantity}</span>
                             <span>£{(item.price * item.quantity).toFixed(2)}</span>
@@ -188,7 +188,7 @@ const UserDashboard = () => {
               </Card>
             ) : (
               <>
-                {paginatedBookings.map((booking: any) => (
+                {paginatedBookings.map((booking) => (
                   <Card key={booking.id}>
                     <CardHeader>
                       <div className="flex items-center justify-between">
@@ -345,7 +345,7 @@ const UserDashboard = () => {
                   Order Items
                 </h3>
                 <div className="space-y-2">
-                  {selectedOrder.items?.map((item: any, idx: number) => (
+                  {selectedOrder.items?.map((item, idx) => (
                     <div key={idx} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
                       <div>
                         <p className="font-medium">{item.name}</p>
@@ -399,7 +399,7 @@ const UserDashboard = () => {
                     onClick={() => {
                       const customerEmail = selectedOrder.customerInfo?.email || selectedOrder.email;
                       const subject = `Your Receipt - Order ${selectedOrder.id}`;
-                      const body = `Dear ${selectedOrder.customerInfo?.fullName || selectedOrder.fullName},\n\nThank you for your order ${selectedOrder.id}.\n\nOrder Details:\nTotal: ₦${selectedOrder.total.toLocaleString()}\nStatus: ${selectedOrder.paymentStatus}\nDate: ${new Date(selectedOrder.createdAt).toLocaleDateString("en-GB")}\n\nItems:\n${selectedOrder.items?.map((item: any) => `- ${item.name} x${item.quantity} - ₦${(item.price * item.quantity).toLocaleString()}`).join("\n")}\n\nIf you have any questions, please contact us.\n\nBest regards,\nGlow Beauty Emporium`;
+                      const body = `Dear ${selectedOrder.customerInfo?.fullName || selectedOrder.fullName},\n\nThank you for your order ${selectedOrder.id}.\n\nOrder Details:\nTotal: ₦${selectedOrder.total.toLocaleString()}\nStatus: ${selectedOrder.paymentStatus}\nDate: ${new Date(selectedOrder.createdAt).toLocaleDateString("en-GB")}\n\nItems:\n${selectedOrder.items?.map((item) => `- ${item.name} x${item.quantity} - ₦${(item.price * item.quantity).toLocaleString()}`).join("\n")}\n\nIf you have any questions, please contact us.\n\nBest regards,\nGlow Beauty Emporium`;
                       
                       window.location.href = `mailto:${customerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                       toast.info("Opening email client with receipt details...");
@@ -466,7 +466,7 @@ const UserDashboard = () => {
                                   <h3>Receipt Details</h3>
                                   <p><strong>Receipt No:</strong> ${selectedOrder.id}</p>
                                   <p><strong>Date:</strong> ${new Date(selectedOrder.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}</p>
-                                  <p><strong>Payment Method:</strong> ${selectedOrder.paymentMethod?.replace("-", " ").replace(/\b\w/g, (l: string) => l.toUpperCase()) || "N/A"}</p>
+                                  <p><strong>Payment Method:</strong> ${selectedOrder.paymentMethod?.replace("-", " ").replace(/\b\w/g, (l) => l.toUpperCase()) || "N/A"}</p>
                                 </div>
                                 <div class="detail-section">
                                   <h3>Customer</h3>
@@ -485,7 +485,7 @@ const UserDashboard = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  ${selectedOrder.items?.map((item: any) => `
+                                  ${selectedOrder.items?.map((item) => `
                                     <tr>
                                       <td>${item.name}</td>
                                       <td>${item.quantity}</td>

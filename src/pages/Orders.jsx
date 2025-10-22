@@ -10,14 +10,13 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { ShoppingBag, Upload, CheckCircle, Clock, AlertCircle } from "lucide-react";
-import { Order } from "./Checkout";
 import PrintableInvoice from "@/components/PrintableInvoice";
 
 const Orders = () => {
   const navigate = useNavigate();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [uploadingOrderId, setUploadingOrderId] = useState<string | null>(null);
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [orders, setOrders] = useState([]);
+  const [uploadingOrderId, setUploadingOrderId] = useState(null);
+  const [receiptFile, setReceiptFile] = useState(null);
 
   useEffect(() => {
     // Load orders from localStorage
@@ -27,13 +26,13 @@ const Orders = () => {
     }
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setReceiptFile(e.target.files[0]);
     }
   };
 
-  const handleUploadReceipt = (orderId: string) => {
+  const handleUploadReceipt = (orderId) => {
     if (!receiptFile) {
       toast({
         title: "No File Selected",
@@ -49,7 +48,7 @@ const Orders = () => {
         return {
           ...order,
           receiptUrl: URL.createObjectURL(receiptFile),
-          paymentStatus: "pending" as const,
+          paymentStatus: "pending",
         };
       }
       return order;
@@ -66,7 +65,7 @@ const Orders = () => {
     });
   };
 
-  const getStatusBadge = (status: Order["paymentStatus"]) => {
+  const getStatusBadge = (status) => {
     switch (status) {
       case "paid":
         return (

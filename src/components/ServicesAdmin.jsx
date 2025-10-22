@@ -10,31 +10,16 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { toast } from "sonner";
 import { Trash2, Plus, Pencil } from "lucide-react";
 
-export interface BookingService {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  path: string;
-  price: number;
-}
-
-export interface ServiceCategory {
-  id: string;
-  name: string;
-  icon: string;
-}
-
 const STORAGE_KEY = "booking_services";
 const CATEGORIES_KEY = "service_categories";
 
-export const getServiceCategories = (): ServiceCategory[] => {
+export const getServiceCategories = () => {
   const stored = localStorage.getItem(CATEGORIES_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
   
-  const initialCategories: ServiceCategory[] = [
+  const initialCategories = [
     { id: "makeup", name: "Make-up Services", icon: "Sparkles" },
     { id: "hair", name: "Hair Styling Services", icon: "Scissors" },
   ];
@@ -43,18 +28,18 @@ export const getServiceCategories = (): ServiceCategory[] => {
   return initialCategories;
 };
 
-const saveServiceCategories = (categories: ServiceCategory[]) => {
+const saveServiceCategories = (categories) => {
   localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
 };
 
-export const getBookingServices = (): BookingService[] => {
+export const getBookingServices = () => {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
   
   // Initial default services with updated prices
-  const initialServices: BookingService[] = [
+  const initialServices = [
     {
       id: "bridal-makeup",
       title: "Bridal Makeup",
@@ -109,13 +94,13 @@ export const getBookingServices = (): BookingService[] => {
   return initialServices;
 };
 
-const saveBookingServices = (services: BookingService[]) => {
+const saveBookingServices = (services) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(services));
 };
 
 const ServicesAdmin = () => {
-  const [services, setServices] = useState<BookingService[]>(getBookingServices());
-  const [categories, setCategories] = useState<ServiceCategory[]>(getServiceCategories());
+  const [services, setServices] = useState(getBookingServices());
+  const [categories, setCategories] = useState(getServiceCategories());
   const [newService, setNewService] = useState({
     title: "",
     description: "",
@@ -126,15 +111,15 @@ const ServicesAdmin = () => {
     name: "",
     icon: "Star",
   });
-  const [editingService, setEditingService] = useState<BookingService | null>(null);
+  const [editingService, setEditingService] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [showCategoryForm, setShowCategoryForm] = useState(false);
 
-  const generatePath = (title: string): string => {
+  const generatePath = (title) => {
     return `/book/${title.toLowerCase().replace(/\s+/g, '-')}`;
   };
 
-  const generateId = (title: string): string => {
+  const generateId = (title) => {
     return title.toLowerCase().replace(/\s+/g, '-');
   };
 
@@ -145,7 +130,7 @@ const ServicesAdmin = () => {
     }
 
     const categoryId = generateId(newCategory.name);
-    const newCategoryItem: ServiceCategory = {
+    const newCategoryItem = {
       id: categoryId,
       name: newCategory.name,
       icon: newCategory.icon,
@@ -160,7 +145,7 @@ const ServicesAdmin = () => {
     toast.success("Category added successfully!");
   };
 
-  const handleDeleteCategory = (categoryId: string) => {
+  const handleDeleteCategory = (categoryId) => {
     // Check if any services use this category
     const servicesInCategory = services.filter(s => s.category === categoryId);
     if (servicesInCategory.length > 0) {
@@ -180,7 +165,7 @@ const ServicesAdmin = () => {
       return;
     }
 
-    const newBookingService: BookingService = {
+    const newBookingService = {
       id: generateId(newService.title),
       title: newService.title,
       description: newService.description,
@@ -203,14 +188,14 @@ const ServicesAdmin = () => {
     toast.success("Service added successfully!");
   };
 
-  const handleDeleteService = (id: string) => {
+  const handleDeleteService = (id) => {
     const updatedServices = services.filter(service => service.id !== id);
     setServices(updatedServices);
     saveBookingServices(updatedServices);
     toast.success("Service deleted successfully!");
   };
 
-  const handleEditService = (service: BookingService) => {
+  const handleEditService = (service) => {
     setEditingService({ ...service });
     setIsEditDialogOpen(true);
   };
@@ -234,7 +219,7 @@ const ServicesAdmin = () => {
     toast.success("Service updated successfully!");
   };
 
-  const getServicesByCategory = (categoryId: string) => {
+  const getServicesByCategory = (categoryId) => {
     return services.filter(s => s.category === categoryId);
   };
 

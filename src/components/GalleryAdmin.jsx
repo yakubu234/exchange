@@ -9,25 +9,16 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { toast } from "sonner";
 import { Trash2, Plus, Upload, Pencil } from "lucide-react";
 
-export interface GalleryItem {
-  id: number;
-  title: string;
-  client: string;
-  description: string;
-  image: string;
-  category: string;
-}
-
 const STORAGE_KEY = "gallery_items";
 
-export const getGalleryItems = (): GalleryItem[] => {
+export const getGalleryItems = () => {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
   
   // Initial gallery items
-  const initialItems: GalleryItem[] = [
+  const initialItems = [
     {
       id: 1,
       title: "Bridal Makeup & Styling",
@@ -82,12 +73,12 @@ export const getGalleryItems = (): GalleryItem[] => {
   return initialItems;
 };
 
-const saveGalleryItems = (items: GalleryItem[]) => {
+const saveGalleryItems = (items) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 };
 
 const GalleryAdmin = () => {
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(getGalleryItems());
+  const [galleryItems, setGalleryItems] = useState(getGalleryItems());
   const [newItem, setNewItem] = useState({
     title: "",
     client: "",
@@ -95,15 +86,15 @@ const GalleryAdmin = () => {
     image: "",
     category: ""
   });
-  const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+  const [editingItem, setEditingItem] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setNewItem({ ...newItem, image: reader.result as string });
+        setNewItem({ ...newItem, image: reader.result });
       };
       reader.readAsDataURL(file);
     }
@@ -115,7 +106,7 @@ const GalleryAdmin = () => {
       return;
     }
 
-    const newGalleryItem: GalleryItem = {
+    const newGalleryItem = {
       id: Date.now(),
       ...newItem
     };
@@ -135,14 +126,14 @@ const GalleryAdmin = () => {
     toast.success("Gallery item added successfully!");
   };
 
-  const handleDeleteItem = (id: number) => {
+  const handleDeleteItem = (id) => {
     const updatedItems = galleryItems.filter(item => item.id !== id);
     setGalleryItems(updatedItems);
     saveGalleryItems(updatedItems);
     toast.success("Gallery item deleted successfully!");
   };
 
-  const handleEditItem = (item: GalleryItem) => {
+  const handleEditItem = (item) => {
     setEditingItem({ ...item });
     setIsEditDialogOpen(true);
   };
@@ -163,12 +154,12 @@ const GalleryAdmin = () => {
     toast.success("Gallery item updated successfully!");
   };
 
-  const handleEditImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEditImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (file && editingItem) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setEditingItem({ ...editingItem, image: reader.result as string });
+        setEditingItem({ ...editingItem, image: reader.result });
       };
       reader.readAsDataURL(file);
     }

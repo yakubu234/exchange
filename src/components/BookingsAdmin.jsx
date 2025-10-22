@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/pagination";
 import { toast } from "sonner";
 import { Eye, CheckCircle, XCircle, Clock, Upload, Printer, User, CreditCard, Calendar as CalendarIcon } from "lucide-react";
-import PrintableBookingReceipt, { Booking } from "@/components/PrintableBookingReceipt";
+import PrintableBookingReceipt from "@/components/PrintableBookingReceipt";
 
 const ITEMS_PER_PAGE = 10;
 

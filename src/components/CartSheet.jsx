@@ -12,12 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 
-interface CartSheetProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-const CartSheet = ({ open, onOpenChange }: CartSheetProps) => {
+const CartSheet = ({ open, onOpenChange }) => {
   const {
     cartItems,
     savedItems,

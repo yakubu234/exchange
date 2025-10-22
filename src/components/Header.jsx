@@ -26,7 +26,7 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, isAdmin, logout } = useAuth();
   
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path) => location.pathname === path;
   
   const firstName = user?.name.split(' ')[0];
   

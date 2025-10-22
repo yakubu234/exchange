@@ -3,11 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 
-interface CartIconProps {
-  onClick: () => void;
-}
-
-const CartIcon = ({ onClick }: CartIconProps) => {
+const CartIcon = ({ onClick }) => {
   const { getTotalItems } = useCart();
   const itemCount = getTotalItems();
 

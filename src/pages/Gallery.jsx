@@ -3,10 +3,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getGalleryItems, type GalleryItem } from "@/components/GalleryAdmin";
+import { getGalleryItems } from "@/components/GalleryAdmin";
 
 const Gallery = () => {
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [galleryItems, setGalleryItems] = useState([]);
 
   useEffect(() => {
     setGalleryItems(getGalleryItems());

@@ -32,7 +32,7 @@ const ProductCategory = () => {
   const { category } = useParams();
   const { addToCart } = useCart();
   
-  const categoryNames: Record<string, string> = {
+  const categoryNames = {
     "human-hair-extension": "Human Hair Extension - Hair Kiki",
     "braided-wigs": "Braided Wigs",
     "ready-to-wear": "Ready to Wear",

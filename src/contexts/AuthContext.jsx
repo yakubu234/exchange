@@ -1,25 +1,9 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: "user" | "admin";
-}
+const AuthContext = createContext(undefined);
 
-interface AuthContextType {
-  user: User | null;
-  login: (email: string, password: string) => boolean;
-  signup: (email: string, password: string, name: string) => boolean;
-  logout: () => void;
-  isAuthenticated: boolean;
-  isAdmin: boolean;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
@@ -28,10 +12,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const signup = (email: string, password: string, name: string): boolean => {
+  const signup = (email, password, name) => {
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     
-    if (users.find((u: any) => u.email === email)) {
+    if (users.find((u) => u.email === email)) {
       return false; // User already exists
     }
 
@@ -40,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       email,
       password,
       name,
-      role: email.includes("admin") ? "admin" : "user" as "user" | "admin"
+      role: email.includes("admin") ? "admin" : "user"
     };
 
     users.push(newUser);
@@ -48,9 +32,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return true;
   };
 
-  const login = (email: string, password: string): boolean => {
+  const login = (email, password) => {
     const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const foundUser = users.find((u: any) => u.email === email && u.password === password);
+    const foundUser = users.find((u) => u.email === email && u.password === password);
 
     if (foundUser) {
       const { password: _, ...userWithoutPassword } = foundUser;

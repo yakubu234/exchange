@@ -21,14 +21,14 @@ import PrintableBookingReceipt, { Booking } from "@/components/PrintableBookingR
 const ITEMS_PER_PAGE = 10;
 
 const BookingsAdmin = () => {
-  const [bookings, setBookings] = useState<Booking[]>(() => 
+  const [bookings, setBookings] = useState(() =>
     JSON.parse(localStorage.getItem("bookings") || "[]")
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState(null);
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "paid" | "approved">("all");
+  const [filterStatus, setFilterStatus] = useState("all");
 
   // Filter bookings
   const filteredBookings = bookings.filter(booking => {
@@ -47,7 +47,7 @@ const BookingsAdmin = () => {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedBookings = filteredBookings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const handleUpdatePaymentStatus = (bookingId: string, newStatus: "pending" | "paid" | "approved") => {
+  const handleUpdatePaymentStatus = (bookingId, newStatus) => {
     const updatedBookings = bookings.map(b => 
       b.id === bookingId ? { ...b, paymentStatus: newStatus } : b
     );
@@ -60,7 +60,7 @@ const BookingsAdmin = () => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status) => {
     switch (status) {
       case "paid":
       case "approved":
@@ -92,7 +92,7 @@ const BookingsAdmin = () => {
             />
             <Select
               value={filterStatus}
-              onValueChange={(value: any) => {
+              onValueChange={(value) => {
                 setFilterStatus(value);
                 setCurrentPage(1);
               }}

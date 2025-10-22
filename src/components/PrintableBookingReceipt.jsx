@@ -3,31 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Printer, CheckCircle } from "lucide-react";
 
-export interface Booking {
-  id: string;
-  service: string;
-  date: string;
-  time: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  address: string;
-  county: string;
-  postcode: string;
-  comments?: string;
-  price: number;
-  paymentMethod: string;
-  paymentStatus: "pending" | "paid" | "approved";
-  receiptUrl?: string;
-  createdAt: string;
-}
-
-interface PrintableBookingReceiptProps {
-  booking: Booking;
-}
-
-const PrintableBookingReceipt = ({ booking }: PrintableBookingReceiptProps) => {
-  const receiptRef = useRef<HTMLDivElement>(null);
+const PrintableBookingReceipt = ({ booking }) => {
+  const receiptRef = useRef(null);
 
   const handlePrint = () => {
     const printContent = receiptRef.current;

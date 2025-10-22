@@ -5,12 +5,8 @@ import { Separator } from "@/components/ui/separator";
 import { Printer, CheckCircle } from "lucide-react";
 import { Order } from "@/pages/Checkout";
 
-interface PrintableInvoiceProps {
-  order: Order;
-}
-
-const PrintableInvoice = ({ order }: PrintableInvoiceProps) => {
-  const invoiceRef = useRef<HTMLDivElement>(null);
+const PrintableInvoice = ({ order }) => {
+  const invoiceRef = useRef(null);
 
   const handlePrint = () => {
     const printContent = invoiceRef.current;
